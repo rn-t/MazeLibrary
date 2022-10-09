@@ -16,6 +16,8 @@ class Maze{
      */
     uint8_t cost[16][16];
 
+    void print();
+
 };
 
 #endif
