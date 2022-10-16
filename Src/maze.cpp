@@ -2,14 +2,35 @@
 
 #include "maze.hpp"
 
+/**
+ * コンストラクタ 
+*/
+
+Maze::Maze(){
+    //自明な壁(外枠)を生成
+    for(uint8_t i = 0; i < 16; i++){
+        // 下側に壁を追加
+        wall[i][0] = wall[i][0] | 0b1000;
+        // 上側に壁を追加
+        wall[i][15] = wall[i][16] | 0b0001;
+        
+        // 左側に壁を追加
+        wall[0][i] = wall[0][i] | 0b0100;
+        // 右側に壁を追加
+        wall[15][i] = wall[15][i] | 0b0010;
+    }
+
+    //ゴール座標をもとに初期歩数を生成
+}
+
 void Maze::print(){
     for(int i = 0; i < 16; i++){
         if(i == 0) printf("┏");
 
         if((wall[i][15] & 0b1) == 0b1){
-            printf("━━━━");
+            printf("━━━━━");
         }else{
-            printf("    ");
+            printf("     ");
         }
         if(i < 15){
             printf("┳");
@@ -26,7 +47,7 @@ void Maze::print(){
             }else{
                 printf(" ");   
             }
-            printf(" %.2d ", 0);
+            printf(" %.3d ", cost[i][j]);
                 
         }
         if((wall[15][j] & 0b10) == 0b10){
@@ -44,9 +65,9 @@ void Maze::print(){
         }
         for(int i = 0; i < 16; i++){
             if((wall[i][j] & 0b1000) == 0b1000){
-                printf("━━━━");
+                printf("━━━━━");
             }else{
-                printf("    ");
+                printf("     ");
             }
             if(i < 15){
                 if(j > 0){

@@ -2,6 +2,7 @@
 #include <cstdint>
 
 #include "maze.hpp"
+#include "method.hpp"
 
 int main(void){
     Maze maze;
@@ -12,10 +13,14 @@ int main(void){
     
     for(int i = 0; i < 16; i++){
         for(int j = 0; j < 16; j++){
-            maze.wall[i][j] = map[i][j];
+            //maze.wall[i][j] = map[i][j];
         }
     }
+
+    AdachiMethod method(&maze);
     
+    method.cost_update();
     maze.print();
+
     return 0;
 }

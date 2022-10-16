@@ -12,7 +12,9 @@ class Mouse{
     Mouse(){
         x = 0;
         y = 0;
-        muki = 'u';
+        //wasd操作っぽく管理する
+        //wasd = ↑←↓→
+        muki = 'w';
     };
 
 };

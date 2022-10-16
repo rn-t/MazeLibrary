@@ -24,10 +24,7 @@ class Maze{
      */
     uint8_t cost[16][16];
 
-    Maze(){
-        //todo 自明な壁の生成。コストをでかくする
-        for()
-    }
+    Maze();
 
     void print();
 
