@@ -1,4 +1,6 @@
 #include "method.hpp"
+#include "stdio.h"
+
 
 AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
     this->maze = new_maze;
@@ -10,42 +12,70 @@ AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
         }
     }
 
-    
+    //goalsにゴール座標を入れる
+    std::vector<uint8_t> temp{maze->goal[0], maze->goal[1]};
+    goals.push_back(temp);
+    temp[0]++;
+    goals.push_back(temp);
+    temp[1]++;
+    goals.push_back(temp);
+    temp[0]--;
+    goals.push_back(temp);
 
-    maze->cost[maze->goal[0]][maze->goal[1]] = 0;
-    maze->cost[maze->goal[0] + 1][maze->goal[1]] = 0;
-    maze->cost[maze->goal[0]][maze->goal[1] + 1] = 0;
-    maze->cost[maze->goal[0] + 1][maze->goal[1] + 1] = 0;
+    //範囲for文というやつらしい
+    for(const auto& g : goals){
+        maze->cost[g[0]][g[1]] = 0;
+        
+
+    }
 
 }
 
 void AdachiMethod::cost_update(){
     uint8_t node_cost = 0;
+    search_next = goals;
     //コスト0の地点(ゴール)から順に歩数マップを作成する。
     //スタート地点に来たら止める
     //マップのの全探索をしているので、あまり良くない。
     while (node_cost < 255){
-        for(uint8_t i = 0; i < 16; i++){
-            for(uint8_t j = 0; j < 16; j++){
-                if(maze->cost[i][j] == node_cost){
-                    if(i != 0 && (maze->wall[i][j] & 0b0100) != 0b0100){
-                        if(maze->cost[i - 1][j] > (node_cost + 1)) maze->cost[i - 1][j] = node_cost + 1;
-                    }
-                    if(i != 15 && (maze->wall[i][j] & 0b0010) != 0b0010){
-                        if(maze->cost[i + 1][j] > (node_cost + 1)) maze->cost[i + 1][j] = node_cost + 1;
-                    }
-                    
-                    if(j != 0 && (maze->wall[i][j] & 0b1000) != 0b1000){
-                        if(maze->cost[i][j - 1] > (node_cost + 1)) maze->cost[i][j - 1] = node_cost + 1;
-                    }
-                    if(j != 15 && (maze->wall[i][j] & 0b0001) != 0b0001){
-                        if(maze->cost[i][j + 1] > (node_cost + 1)) maze->cost[i][j + 1] = node_cost + 1;
-                    }
-                    
-                    
+        search_now = std::move(search_next);
+        search_next.clear();
+
+        for (const auto& s : search_now){
+            uint8_t i = s[0];
+            uint8_t j = s[1];
+
+            if(i != 0 && (maze->wall[i][j] & 0b0100) != 0b0100){
+                if(maze->cost[i - 1][j] > (node_cost + 1)){
+                    maze->cost[i - 1][j] = node_cost + 1;
+                    std::vector<uint8_t> temp{static_cast<uint8_t>(i - 1), j};
+                    search_next.push_back(temp);
                 }
             }
+            if(i != 15 && (maze->wall[i][j] & 0b0010) != 0b0010){
+                if(maze->cost[i + 1][j] > (node_cost + 1)){
+                    maze->cost[i + 1][j] = node_cost + 1;
+                    std::vector<uint8_t> temp{static_cast<uint8_t>(i + 1), j};
+                    search_next.push_back(temp);
+                }
+            }
+            if(j != 0 && (maze->wall[i][j] & 0b1000) != 0b1000){
+                if(maze->cost[i][j - 1] > (node_cost + 1)){
+                    maze->cost[i][j - 1] = node_cost + 1;
+                    std::vector<uint8_t> temp{i, static_cast<uint8_t>(j - 1)};
+                    search_next.push_back(temp);
+                }
+            }
+            if(j != 15 && (maze->wall[i][j] & 0b0001) != 0b0001){
+                if(maze->cost[i][j + 1] > (node_cost + 1)){
+                    maze->cost[i][j + 1] = node_cost + 1;
+                    std::vector<uint8_t> temp{i, static_cast<uint8_t>(j + 1)};
+                    search_next.push_back(temp);
+                }
+            }
+
         }
+                    
         if(maze->cost[mouse->x][mouse->y] < 255) break;
 
         node_cost++;

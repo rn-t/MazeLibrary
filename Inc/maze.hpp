@@ -18,11 +18,13 @@ class Maze{
      * 
      */
     uint8_t wall[16][16] = {};
+
     /**
      * @brief 各区画のコスト
      * 
      */
     uint8_t cost[16][16];
+
 
     Maze();
 

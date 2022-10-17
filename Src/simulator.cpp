@@ -6,6 +6,7 @@
 
 int main(void){
     Maze maze;
+    Mouse mouse;
 
     //迷路データはhttp://mice.deca.jp/maze/ より
     //2018の全日本クラシックらしい
@@ -13,11 +14,12 @@ int main(void){
     
     for(int i = 0; i < 16; i++){
         for(int j = 0; j < 16; j++){
-            //maze.wall[i][j] = map[i][j];
+            maze.wall[i][j] = map[i][j];
         }
     }
-
-    AdachiMethod method(&maze);
+    
+    
+    AdachiMethod method(&maze, &mouse);
     
     method.cost_update();
     maze.print();
