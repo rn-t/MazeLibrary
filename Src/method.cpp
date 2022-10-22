@@ -32,12 +32,11 @@ AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
 
 }
 
-void AdachiMethod::cost_update(){
+void AdachiMethod::cost_refresh(){
     uint8_t node_cost = 0;
     search_next = goals;
     //コスト0の地点(ゴール)から順に歩数マップを作成する。
     //スタート地点に来たら止める
-    //マップのの全探索をしているので、あまり良くない。
     while (node_cost < 255){
         search_now = std::move(search_next);
         search_next.clear();

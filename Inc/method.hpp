@@ -19,7 +19,7 @@ class AdachiMethod{
     std::vector< std::vector<uint8_t>> search_next;
 
     AdachiMethod(Maze *new_maze, Mouse *new_mouse);
-    void cost_update();
+    void cost_refresh();
     void delete_bad_route();
     uint8_t goal_check();
 };
