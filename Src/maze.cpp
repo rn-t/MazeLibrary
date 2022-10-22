@@ -2,6 +2,7 @@
 #include <string>
 
 #include "maze.hpp"
+#include "direction.hpp"
 
 /**
  * コンストラクタ 
@@ -87,7 +88,12 @@ void Maze::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
     }
 }
 
-void Maze::print_wall_with_arrow(uint8_t (&n)[16][16] ){
+/**
+ * @brief 方向と現在地をいい感じに表示する
+ * @param n: 方向を保存した2次元配列
+ * @param current: 現在地を保存した配列{x, y} 
+*/
+void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]){
     for(int i = 0; i < 16; i++){
         if(i == 0) printf("┏");
 
@@ -113,24 +119,28 @@ void Maze::print_wall_with_arrow(uint8_t (&n)[16][16] ){
             }
 
             std::string s;
-            switch (n[i][j])
-            {
-            case Direction::down:
-                s = "👇";
-                break;
-            case Direction::left:
-                s = "👈";
-                break;
-            case Direction::right:
-                s = "👉";
-                break;
-            case Direction::up:
-                s = "👆";
-                break;
-            default:
-                s = "  ";
-                break;
+            if(i == current[0] && j == current[1]){
+                s = "🖱️";
+            }else{
+                switch (n[i][j]){
+                case Direction::down:
+                    s = "👇";
+                    break;
+                case Direction::left:
+                    s = "👈";
+                    break;
+                case Direction::right:
+                    s = "👉";
+                    break;
+                case Direction::up:
+                    s = "👆";
+                    break;
+                default:
+                    s = "  ";
+                    break;
+                }
             }
+            
             printf(" %s ", s.c_str());
                 
         }
@@ -175,7 +185,12 @@ void Maze::print_cost(){
     print_wall_with_uint8_t(cost);
 }
 
-void Maze::print_route(){
-    print_wall_with_arrow(route);
+/**
+ * @param x 現在のx
+ * @param y 現在のy
+*/
+void Maze::print_route(uint8_t x, uint8_t y){
+    uint8_t current[2] = {x, y};
+    print_wall_with_arrow(route, current);
 }
 

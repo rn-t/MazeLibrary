@@ -1,4 +1,5 @@
 #include "mouse.hpp"
+#include "direction.hpp"
 
 Mouse::Mouse(){
     x = 0;

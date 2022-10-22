@@ -8,9 +8,7 @@ class Mouse{
     uint8_t x;
     uint8_t y;
 
-    enum class Direction: uint8_t { up, down, left, right};
-
-    Direction direction;
+    uint8_t direction;
 
     Mouse();
 

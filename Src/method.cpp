@@ -1,17 +1,14 @@
 #include "stdio.h"
 #include "method.hpp"
 #include <algorithm>
+#include "direction.hpp"
 
 
 AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
     this->maze = new_maze;
     this->mouse = new_mouse;
 
-    for (uint8_t i = 0; i < 16; i++){
-        for (uint8_t j = 0; j < 16; j++){
-            maze->cost[i][j] = 255;
-        }
-    }
+    cost_reset();
 
     //goalsにゴール座標を入れる
     std::vector<uint8_t> temp{maze->goal[0], maze->goal[1]};
@@ -26,13 +23,20 @@ AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
     //範囲for文というやつらしい
     for(const auto& g : goals){
         maze->cost[g[0]][g[1]] = 0;
-        
-
     }
 
 }
 
-void AdachiMethod::cost_refresh(){
+void AdachiMethod::cost_reset(){
+    for (uint8_t i = 0; i < 16; i++){
+        for (uint8_t j = 0; j < 16; j++){
+            maze->cost[i][j] = 255;
+        }
+    } 
+}
+
+void AdachiMethod::cost_refresh(){ 
+
     uint8_t node_cost = 0;
     search_next = goals;
     //コスト0の地点(ゴール)から順に歩数マップを作成する。
@@ -46,41 +50,41 @@ void AdachiMethod::cost_refresh(){
             uint8_t j = s[1];
 
             //←の場合
-            if(i != 0 && (maze->wall[i][j] & Maze::Direction::left) != Maze::Direction::left){
+            if(i != 0 && (maze->wall[i][j] & Direction::left) != Direction::left){
                 if(maze->cost[i - 1][j] > (node_cost + 1)){
                     maze->cost[i - 1][j] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i - 1][j] = maze->route[i - 1][j] | Maze::Direction::right;
+                    maze->route[i - 1][j] = Direction::right;
                     std::vector<uint8_t> temp{static_cast<uint8_t>(i - 1), j};
                     search_next.push_back(temp);
                 }
             }
             //→の場合
-            if(i != 15 && (maze->wall[i][j] & Maze::Direction::right) != Maze::Direction::right){
+            if(i != 15 && (maze->wall[i][j] & Direction::right) != Direction::right){
                 if(maze->cost[i + 1][j] > (node_cost + 1)){
                     maze->cost[i + 1][j] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i + 1][j] = maze->route[i + 1][j] | Maze::Direction::left;
+                    maze->route[i + 1][j] = Direction::left;
                     std::vector<uint8_t> temp{static_cast<uint8_t>(i + 1), j};
                     search_next.push_back(temp);
                 }
             }
             //↓の場合
-            if(j != 0 && (maze->wall[i][j] & Maze::Direction::down) != Maze::Direction::down){
+            if(j != 0 && (maze->wall[i][j] & Direction::down) != Direction::down){
                 if(maze->cost[i][j - 1] > (node_cost + 1)){
                     maze->cost[i][j - 1] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i][j - 1] = maze->route[i][j - 1] | Maze::Direction::up;
+                    maze->route[i][j - 1] = Direction::up;
                     std::vector<uint8_t> temp{i, static_cast<uint8_t>(j - 1)};
                     search_next.push_back(temp);
                 }
             }
             //↑の場合
-            if(j != 15 && (maze->wall[i][j] & Maze::Direction::up) != Maze::Direction::up){
+            if(j != 15 && (maze->wall[i][j] & Direction::up) != Direction::up){
                 if(maze->cost[i][j + 1] > (node_cost + 1)){
                     maze->cost[i][j + 1] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i][j + 1] = maze->route[i][j + 1] | Maze::Direction::down;
+                    maze->route[i][j + 1] = Direction::down;
                     std::vector<uint8_t> temp{i, static_cast<uint8_t>(j + 1)};
                     search_next.push_back(temp);
                 }
@@ -107,16 +111,16 @@ void AdachiMethod::delete_bad_route(){
         route_buffer.push_back(maze->route[agent[0]][agent[1]]);
         
         switch(maze->route[agent[0]][agent[1]]){
-            case Maze::Direction::down:
+            case Direction::down:
                 agent[1]--;
                 break;
-            case Maze::Direction::left:
+            case Direction::left:
                 agent[0]--;
                 break;
-            case Maze::Direction::right:
+            case Direction::right:
                 agent[0]++;
                 break;
-            case Maze::Direction::up:
+            case Direction::up:
                 agent[1]++;
                 break;
         }

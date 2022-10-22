@@ -5,6 +5,38 @@
 
 #include "maze.hpp"
 #include "method.hpp"
+#include "direction.hpp"
+
+int16_t direction_to_deg(uint8_t direction){
+    uint16_t out = 0;
+    switch(direction){
+            case Direction::up:
+                out = 0;
+                break;
+            case Direction::down:
+                out = 180;
+                break;
+            case Direction::left:
+                out = 90;
+                break;
+            case Direction::right:
+                out = -90;
+                break;
+        }
+    return out;
+}
+
+int16_t deg_sub(int16_t a, int16_t b){
+    int16_t out = a - b;
+    while(out <= -180 || 180 < out){
+        if(out <= -180){
+            out += 360;
+        }else if(180 < out){
+            out -= 360;
+        }
+    }
+    return out;
+}
 
 int main(void){
     Maze maze;
@@ -28,10 +60,30 @@ int main(void){
         //真の迷路からの壁情報の読み込み
         maze.wall[mouse.x][mouse.y] = true_maze.wall[mouse.x][mouse.y];
 
-
+        //コストの再計算
         method.cost_refresh();
+        //いらない経路の削除
         method.delete_bad_route();
-        maze.print_route();        
+        
+        maze.print_route(mouse.x, mouse.y);        
+
+        int16_t mouse_deg = direction_to_deg(mouse.direction);
+        int16_t maze_deg = direction_to_deg(maze.route[mouse.x][mouse.y]);
+
+        int16_t turn_deg = deg_sub(mouse_deg, maze_deg);
+
+        switch(turn_deg){
+            case 90:
+                mouse.turn_inv90();
+                break;
+            case -90:
+                mouse.turn_90();
+                break;
+            case 180:
+                mouse.turn_180();
+                break;
+        }
+        mouse.move_forward();
 
         //500ms待つ
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
