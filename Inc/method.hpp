@@ -18,14 +18,9 @@ class AdachiMethod{
     std::vector< std::vector<uint8_t>> search_now;
     std::vector< std::vector<uint8_t>> search_next;
 
-    /**
-     * @brief 二進数で↓←→↑
-     * 
-     */
-    uint8_t route[16][16] = {};
-
     AdachiMethod(Maze *new_maze, Mouse *new_mouse);
     void cost_update();
+    void delete_bad_route();
 };
 
 

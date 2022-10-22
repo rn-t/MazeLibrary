@@ -22,7 +22,8 @@ int main(void){
     AdachiMethod method(&maze, &mouse);
     
     method.cost_update();
-    maze.print();
+    method.delete_bad_route();
+    maze.print_route();
 
     return 0;
 }

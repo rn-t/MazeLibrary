@@ -25,10 +25,18 @@ class Maze{
      */
     uint8_t cost[16][16];
 
+    /**
+     * @brief 進める向き。二進数で↓←→↑
+     * 
+     */
+    uint8_t route[16][16] = {};
 
     Maze();
 
-    void print();
+    void print_wall_with_uint8_t(uint8_t (&n)[16][16]);
+    void print_wall_with_arrow(uint8_t (&n)[16][16] );
+    void print_cost();
+    void print_route();
 
 };
 
