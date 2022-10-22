@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <cstdint>
+#include <chrono>
+#include <thread>
 
 #include "maze.hpp"
 #include "method.hpp"
 
 int main(void){
     Maze maze;
+    Maze true_maze;
     Mouse mouse;
 
     //迷路データはhttp://mice.deca.jp/maze/ より
@@ -14,16 +17,27 @@ int main(void){
     
     for(int i = 0; i < 16; i++){
         for(int j = 0; j < 16; j++){
-            maze.wall[i][j] = map[i][j];
+            true_maze.wall[i][j] = map[i][j];
         }
     }
-    
-    
+
     AdachiMethod method(&maze, &mouse);
+
+    /*
+    while(method.goal_check() == 0){
+
+
+        method.cost_update();
+        method.delete_bad_route();
+        maze.print_route();        
+
+        //500ms待つ
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+    */
     
     method.cost_update();
     method.delete_bad_route();
-    maze.print_route();
-
+    maze.print_route();        
     return 0;
 }

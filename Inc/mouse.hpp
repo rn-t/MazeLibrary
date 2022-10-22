@@ -12,13 +12,12 @@ class Mouse{
 
     Direction direction;
 
-    Mouse(){
-        x = 0;
-        y = 0;
-        
-        direction = Direction::up;
-    };
+    Mouse();
 
+    void move_forward();
+    void turn_90();
+    void turn_inv90();
+    void turn_180();
 };
 
 #endif

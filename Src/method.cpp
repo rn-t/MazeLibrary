@@ -1,5 +1,6 @@
-#include "method.hpp"
 #include "stdio.h"
+#include "method.hpp"
+#include <algorithm>
 
 
 AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
@@ -46,41 +47,41 @@ void AdachiMethod::cost_update(){
             uint8_t j = s[1];
 
             //←の場合
-            if(i != 0 && (maze->wall[i][j] & 0b0100) != 0b0100){
+            if(i != 0 && (maze->wall[i][j] & Maze::Direction::left) != Maze::Direction::left){
                 if(maze->cost[i - 1][j] > (node_cost + 1)){
                     maze->cost[i - 1][j] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i - 1][j] = maze->route[i - 1][j] | 0b0010;
+                    maze->route[i - 1][j] = maze->route[i - 1][j] | Maze::Direction::right;
                     std::vector<uint8_t> temp{static_cast<uint8_t>(i - 1), j};
                     search_next.push_back(temp);
                 }
             }
             //→の場合
-            if(i != 15 && (maze->wall[i][j] & 0b0010) != 0b0010){
+            if(i != 15 && (maze->wall[i][j] & Maze::Direction::right) != Maze::Direction::right){
                 if(maze->cost[i + 1][j] > (node_cost + 1)){
                     maze->cost[i + 1][j] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i + 1][j] = maze->route[i + 1][j] | 0b0100;
+                    maze->route[i + 1][j] = maze->route[i + 1][j] | Maze::Direction::left;
                     std::vector<uint8_t> temp{static_cast<uint8_t>(i + 1), j};
                     search_next.push_back(temp);
                 }
             }
             //↓の場合
-            if(j != 0 && (maze->wall[i][j] & 0b1000) != 0b1000){
+            if(j != 0 && (maze->wall[i][j] & Maze::Direction::down) != Maze::Direction::down){
                 if(maze->cost[i][j - 1] > (node_cost + 1)){
                     maze->cost[i][j - 1] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i][j - 1] = maze->route[i][j - 1] | 0b0001;
+                    maze->route[i][j - 1] = maze->route[i][j - 1] | Maze::Direction::up;
                     std::vector<uint8_t> temp{i, static_cast<uint8_t>(j - 1)};
                     search_next.push_back(temp);
                 }
             }
             //↑の場合
-            if(j != 15 && (maze->wall[i][j] & 0b0001) != 0b0001){
+            if(j != 15 && (maze->wall[i][j] & Maze::Direction::up) != Maze::Direction::up){
                 if(maze->cost[i][j + 1] > (node_cost + 1)){
                     maze->cost[i][j + 1] = node_cost + 1;
                     //このノードに向けた矢印を追加する
-                    maze->route[i][j + 1] = maze->route[i][j + 1] | 0b1000;
+                    maze->route[i][j + 1] = maze->route[i][j + 1] | Maze::Direction::down;
                     std::vector<uint8_t> temp{i, static_cast<uint8_t>(j + 1)};
                     search_next.push_back(temp);
                 }
@@ -100,23 +101,23 @@ void AdachiMethod::delete_bad_route(){
     std::vector< std::vector<uint8_t>> in_route;
     //routeの情報を保存しておく
     std::vector<uint8_t> route_buffer;
-    std::vector<uint8_t> agent{0, 0};
+    std::vector<uint8_t> agent{mouse->x, mouse->y};
 
     while(maze->cost[agent[0]][agent[1]] > 0){
         in_route.push_back(agent);
         route_buffer.push_back(maze->route[agent[0]][agent[1]]);
         
         switch(maze->route[agent[0]][agent[1]]){
-            case 0b1000:
+            case Maze::Direction::down:
                 agent[1]--;
                 break;
-            case 0b0100:
+            case Maze::Direction::left:
                 agent[0]--;
                 break;
-            case 0b0010:
+            case Maze::Direction::right:
                 agent[0]++;
                 break;
-            case 0b0001:
+            case Maze::Direction::up:
                 agent[1]++;
                 break;
         }
@@ -134,4 +135,18 @@ void AdachiMethod::delete_bad_route(){
         maze->route[in_route[i][0]][in_route[i][1]] = route_buffer[i];
     }
     
+}
+
+/**
+ * ゴールに入ってたら1、そうでなければ0
+*/
+uint8_t AdachiMethod::goal_check(){
+    std::vector<uint8_t> current{mouse->x, mouse->y};
+    
+    auto res = std::find(goals.begin(), goals.end(), current);
+    if(res == goals.end()){
+        return 0;
+    }else{
+        return 1;
+    }
 }
