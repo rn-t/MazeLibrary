@@ -21,6 +21,8 @@ class AdachiMethod{
     AdachiMethod(Maze *new_maze, Mouse *new_mouse);
 
     void cost_reset();
+    void route_reset();
+
     void cost_refresh();
     void delete_bad_route();
     uint8_t goal_check();

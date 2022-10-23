@@ -20,7 +20,7 @@ AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
     temp[0]--;
     goals.push_back(temp);
 
-    //範囲for文というやつらしい
+    
     for(const auto& g : goals){
         maze->cost[g[0]][g[1]] = 0;
     }
@@ -32,15 +32,29 @@ void AdachiMethod::cost_reset(){
         for (uint8_t j = 0; j < 16; j++){
             maze->cost[i][j] = 255;
         }
-    } 
+    }
+    
+    //範囲for文というやつらしい
+    for(const auto& g : goals){
+        maze->cost[g[0]][g[1]] = 0;
+    }
 }
 
-void AdachiMethod::cost_refresh(){ 
+void AdachiMethod::route_reset(){
+    for (uint8_t i = 0; i < 16; i++){
+        for (uint8_t j = 0; j < 16; j++){
+            maze->route[i][j] = 0;
+        }
+    }
+}
 
+void AdachiMethod::cost_refresh(){
+    cost_reset();
+    route_reset();
     uint8_t node_cost = 0;
     search_next = goals;
     //コスト0の地点(ゴール)から順に歩数マップを作成する。
-    //スタート地点に来たら止める
+    //マウスの現在地に来たら止める
     while (node_cost < 255){
         search_now = std::move(search_next);
         search_next.clear();

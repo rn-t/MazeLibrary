@@ -33,6 +33,8 @@ class Maze{
 
     Maze();
 
+    void wall_update(uint8_t x, uint8_t y, uint8_t w);
+
     void print_wall_with_uint8_t(uint8_t (&n)[16][16]);
     void print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]);
     void print_cost();

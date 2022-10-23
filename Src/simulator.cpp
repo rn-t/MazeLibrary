@@ -47,26 +47,29 @@ int main(void){
     //2018の全日本クラシックらしい
     uint8_t map[16][16]={{14,6,5,12,4,4,6,6,6,6,4,4,5,12,6,7},{14,6,0,3,9,9,12,6,4,5,9,9,10,0,6,7},{14,4,2,6,3,9,8,5,9,9,9,10,6,2,4,7},{12,2,6,6,6,3,9,9,9,9,10,6,6,6,2,5},{9,12,6,6,6,6,3,9,9,10,6,6,6,6,5,9},{9,9,12,6,6,6,6,3,10,4,6,4,5,13,9,9},{9,9,9,12,5,12,4,7,14,0,5,9,9,9,9,9},{9,9,9,9,9,9,9,12,5,11,8,1,9,9,9,9},{9,9,9,9,9,9,9,10,2,5,11,8,0,3,9,9},{9,9,9,9,9,9,10,4,4,3,14,3,10,5,9,9},{9,9,9,9,9,9,12,1,9,12,5,12,5,9,9,9},{9,9,9,9,9,10,1,9,9,9,9,9,9,9,9,9},{9,9,9,9,9,12,0,1,9,9,9,9,9,9,9,9},{9,9,9,9,9,9,9,9,10,3,10,3,9,9,9,9},{9,9,10,3,8,2,2,1,14,6,6,6,2,3,9,9},{10,3,14,6,2,6,6,3,14,6,6,6,6,6,2,3}};
     
-    for(int i = 0; i < 16; i++){
-        for(int j = 0; j < 16; j++){
+    for(uint8_t i = 0; i < 16; i++){
+        for(uint8_t j = 0; j < 16; j++){
             true_maze.wall[i][j] = map[i][j];
         }
     }
 
     AdachiMethod method(&maze, &mouse);
 
-    while(method.goal_check() == 0){
+    while(1){
 
         //真の迷路からの壁情報の読み込み
-        maze.wall[mouse.x][mouse.y] = true_maze.wall[mouse.x][mouse.y];
-
+        maze.wall_update(mouse.x, mouse.y, true_maze.wall[mouse.x][mouse.y]);
+        
         //コストの再計算
         method.cost_refresh();
         //いらない経路の削除
         method.delete_bad_route();
         
-        maze.print_route(mouse.x, mouse.y);        
+        //maze.print_route(mouse.x, mouse.y);
+        maze.print_route(mouse.x, mouse.y);
+        //maze.print_cost();
 
+        if(method.goal_check()) break;
         int16_t mouse_deg = direction_to_deg(mouse.direction);
         int16_t maze_deg = direction_to_deg(maze.route[mouse.x][mouse.y]);
 
