@@ -2,16 +2,23 @@
 #define MAZE_HPP_
 
 #include <cstdint>
+#include <vector>
 
 
 class Maze{
     public:
     
     /**
-     * @brief ゴール座標の左下を設定する。2x2のゴールを仮定している。
+     * @brief スタート座標座標を設定する。複数設定可能。
      * 
      */
-    const uint8_t goal[2] = {7, 7};
+    std::vector< std::vector<uint8_t>> start{{0, 0}};
+    
+    /**
+     * @brief ゴール座標を設定する。複数設定可能。
+     * 
+     */
+    std::vector< std::vector<uint8_t>> goal{{7, 7}, {7, 8}, {8, 7}, {8, 8}};
 
     /**
      * @brief 二進数で↓←→↑

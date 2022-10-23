@@ -8,23 +8,13 @@ AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
     this->maze = new_maze;
     this->mouse = new_mouse;
 
+    set_goals(maze->goal);
     cost_reset();
 
-    //goalsにゴール座標を入れる
-    std::vector<uint8_t> temp{maze->goal[0], maze->goal[1]};
-    goals.push_back(temp);
-    temp[0]++;
-    goals.push_back(temp);
-    temp[1]++;
-    goals.push_back(temp);
-    temp[0]--;
-    goals.push_back(temp);
+}
 
-    
-    for(const auto& g : goals){
-        maze->cost[g[0]][g[1]] = 0;
-    }
-
+void AdachiMethod::set_goals(std::vector< std::vector<uint8_t>> g){
+    goals = g;
 }
 
 void AdachiMethod::cost_reset(){

@@ -20,6 +20,8 @@ class AdachiMethod{
 
     AdachiMethod(Maze *new_maze, Mouse *new_mouse);
 
+    void set_goals(std::vector< std::vector<uint8_t>> g);
+
     void cost_reset();
     void route_reset();
 

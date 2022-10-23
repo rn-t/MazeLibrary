@@ -55,41 +55,49 @@ int main(void){
 
     AdachiMethod method(&maze, &mouse);
 
-    while(1){
-
-        //真の迷路からの壁情報の読み込み
-        maze.wall_update(mouse.x, mouse.y, true_maze.wall[mouse.x][mouse.y]);
-        
-        //コストの再計算
-        method.cost_refresh();
-        //いらない経路の削除
-        method.delete_bad_route();
-        
-        //maze.print_route(mouse.x, mouse.y);
-        maze.print_route(mouse.x, mouse.y);
-        //maze.print_cost();
-
-        if(method.goal_check()) break;
-        int16_t mouse_deg = direction_to_deg(mouse.direction);
-        int16_t maze_deg = direction_to_deg(maze.route[mouse.x][mouse.y]);
-
-        int16_t turn_deg = deg_sub(mouse_deg, maze_deg);
-
-        switch(turn_deg){
-            case 90:
-                mouse.turn_inv90();
-                break;
-            case -90:
-                mouse.turn_90();
-                break;
-            case 180:
-                mouse.turn_180();
-                break;
+    for(uint8_t step = 0; step < 3; step++){
+        if(step == 0 || step == 2){
+            method.set_goals(maze.goal);
+        }else{
+            method.set_goals(maze.start);
         }
-        mouse.move_forward();
 
-        //500ms待つ
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        while(1){
+
+            //真の迷路からの壁情報の読み込み
+            maze.wall_update(mouse.x, mouse.y, true_maze.wall[mouse.x][mouse.y]);
+            
+            //コストの再計算
+            method.cost_refresh();
+            //いらない経路の削除
+            method.delete_bad_route();
+            
+            printf("\033[0;0H");
+            maze.print_route(mouse.x, mouse.y);
+            //maze.print_cost();
+
+            if(method.goal_check() || step == 2) break;
+            int16_t mouse_deg = direction_to_deg(mouse.direction);
+            int16_t maze_deg = direction_to_deg(maze.route[mouse.x][mouse.y]);
+
+            int16_t turn_deg = deg_sub(mouse_deg, maze_deg);
+
+            switch(turn_deg){
+                case 90:
+                    mouse.turn_inv90();
+                    break;
+                case -90:
+                    mouse.turn_90();
+                    break;
+                case 180:
+                    mouse.turn_180();
+                    break;
+            }
+            mouse.move_forward();
+
+            //500ms待つ
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
     }
        
     return 0;

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string>
+#include <algorithm>
 
 #include "maze.hpp"
 #include "direction.hpp"
@@ -45,7 +46,7 @@ void Maze::wall_update(uint8_t x, uint8_t y, uint8_t w){
 }
 
 void Maze::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
-    for(int i = 0; i < 16; i++){
+    for(int8_t i = 0; i < 16; i++){
         if(i == 0) printf("┏");
 
         if((wall[i][15] & Direction::up) == Direction::up){
@@ -59,10 +60,10 @@ void Maze::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
             printf("┓\n");
         }
     }
-    for(int j = 15; j >= 0; j--){
-
+    for(uint8_t j0 = 0; j0 < 16; j0++){
+        uint8_t j = 15 - j0;
         //横壁部分を描画
-        for(int i = 0; i < 16; i++){
+        for(int8_t i = 0; i < 16; i++){
             if((wall[i][j] & Direction::left) == Direction::left){
                 printf("┃");   
             }else{
@@ -84,7 +85,7 @@ void Maze::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
         }else if(j == 0){
             printf("┗");   
         }
-        for(int i = 0; i < 16; i++){
+        for(uint8_t i = 0; i < 16; i++){
             if((wall[i][j] & Direction::down) == Direction::down){
                 printf("━━━━━");
             }else{
@@ -114,7 +115,7 @@ void Maze::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
  * @param current: 現在地を保存した配列{x, y} 
 */
 void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]){
-    for(int i = 0; i < 16; i++){
+    for(uint8_t i = 0; i < 16; i++){
         if(i == 0) printf("┏");
 
         if((wall[i][15] & Direction::up) == Direction::up){
@@ -128,10 +129,11 @@ void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]){
             printf("┓\n");
         }
     }
-    for(int j = 15; j >= 0; j--){
+    for(uint8_t j0 = 0; j0 < 16; j0++){
+        uint8_t j = 15 - j0;
 
         //横壁部分を描画
-        for(int i = 0; i < 16; i++){
+        for(uint8_t i = 0; i < 16; i++){
             if((wall[i][j] & Direction::left) == Direction::left){
                 printf("┃");   
             }else{
@@ -139,8 +141,14 @@ void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]){
             }
 
             std::string s;
+            std::vector<uint8_t> vec{i, j};
             if(i == current[0] && j == current[1]){
                 s = "🖱️";
+            }else if(start.end() != std::find(start.begin(), start.end(), vec)){
+                s = "🌟";
+            }
+            else if(goal.end() != std::find(goal.begin(), goal.end(), vec)){
+                s = "🏁";
             }else{
                 switch (n[i][j]){
                 case Direction::down:
@@ -177,7 +185,7 @@ void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]){
         }else if(j == 0){
             printf("┗");   
         }
-        for(int i = 0; i < 16; i++){
+        for(uint8_t i = 0; i < 16; i++){
             if((wall[i][j] & Direction::down) == Direction::down){
                 printf("━━━━");
             }else{
