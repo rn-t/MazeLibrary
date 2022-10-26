@@ -21,10 +21,12 @@ class Maze{
     std::vector< std::vector<uint8_t>> goal{{7, 7}, {7, 8}, {8, 7}, {8, 8}};
 
     /**
-     * @brief 二進数で↓←→↑
+     * @brief 下位4bitは二進数で↓←→↑、4bit目は探索済みかを示す。
      * 
      */
     uint8_t wall[16][16] = {};
+
+    const uint8_t IS_SEARCHED = 0b00010000;
 
     /**
      * @brief 各区画のコスト

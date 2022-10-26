@@ -28,8 +28,8 @@ class AdachiMethod{
     void cost_refresh();
     void delete_bad_route();
     uint8_t goal_check();
+
+    //todo ゴール座標を最短経路のうち未探索の場所に設定するプログラムを作成
 };
-
-
 
 #endif

@@ -95,7 +95,7 @@ int main(void){
             }
             mouse.move_forward();
 
-            //500ms待つ
+            //300ms待つ
             std::this_thread::sleep_for(std::chrono::milliseconds(300));
         }
     }
