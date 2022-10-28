@@ -56,6 +56,8 @@ int main(void){
 
     AdachiMethod method(&maze, &mouse);
 
+    printf("\033[2J");
+    
     for(uint8_t step = 0; step < 4; step++){
         if(step == 0 || step == 3){
             method.set_goals(maze.goal);
@@ -80,12 +82,18 @@ int main(void){
             method.delete_bad_route();
             
             printf("\033[0;0H");
-            maze.print_route(mouse.x, mouse.y);
+            std::vector<std::vector<uint8_t>> question;
+            if(step == 1){
+                question = method.goals;
+            }
+            maze.print_route(mouse.x, mouse.y, question);
             printf("goal = ");
             for (const auto& g : method.goals){
-                printf("(%d, %d)", g[0], g[1]);
+                printf("(%d,%d)", g[0], g[1]);
             }
-            printf("\n\r");
+            printf("\033[0K");
+            printf("\n");
+            
 
             if(method.goal_check() || step == 3) break;
             int16_t mouse_deg = direction_to_deg(mouse.direction);

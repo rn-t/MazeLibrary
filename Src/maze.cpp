@@ -115,7 +115,7 @@ void Maze::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
  * @param n: 方向を保存した2次元配列
  * @param current: 現在地を保存した配列{x, y} 
 */
-void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]){
+void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2], std::vector<std::vector<uint8_t>> question){
     for(uint8_t i = 0; i < 16; i++){
         if(i == 0) printf("┏");
 
@@ -150,6 +150,8 @@ void Maze::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2]){
             }
             else if(goal.end() != std::find(goal.begin(), goal.end(), vec)){
                 s = "🏁";
+            }else if(question.end() != std::find(question.begin(), question.end(), vec)){
+                s = "❓";
             }else{
                 switch (n[i][j]){
                 case Direction::down:
@@ -218,8 +220,8 @@ void Maze::print_cost(){
  * @param x 現在のx
  * @param y 現在のy
 */
-void Maze::print_route(uint8_t x, uint8_t y){
+void Maze::print_route(uint8_t x, uint8_t y, std::vector<std::vector<uint8_t>> question){
     uint8_t current[2] = {x, y};
-    print_wall_with_arrow(route, current);
+    print_wall_with_arrow(route, current, question);
 }
 
