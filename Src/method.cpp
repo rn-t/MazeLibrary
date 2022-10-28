@@ -13,6 +13,10 @@ AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
 
 }
 
+void AdachiMethod::set_start(std::vector<uint8_t> s){
+    start = s;
+}
+
 void AdachiMethod::set_goals(std::vector< std::vector<uint8_t>> g){
     goals = g;
 }
@@ -96,7 +100,7 @@ void AdachiMethod::cost_refresh(){
 
         }
                     
-        if(maze->cost[mouse->x][mouse->y] < 255) break;
+        if(maze->cost[start[0]][start[1]] < 255) break;
 
         node_cost++;
     }
@@ -108,7 +112,7 @@ void AdachiMethod::delete_bad_route(){
     std::vector< std::vector<uint8_t>> in_route;
     //routeの情報を保存しておく
     std::vector<uint8_t> route_buffer;
-    std::vector<uint8_t> agent{mouse->x, mouse->y};
+    std::vector<uint8_t> agent{start[0], start[1]};
 
     while(maze->cost[agent[0]][agent[1]] > 0){
         in_route.push_back(agent);
@@ -156,4 +160,31 @@ uint8_t AdachiMethod::goal_check(){
     }else{
         return 1;
     }
+}
+
+std::vector< std::vector<uint8_t>> AdachiMethod::get_unknown_in_shortest(){
+    
+    std::vector<uint8_t> temp_start;
+    std::vector< std::vector<uint8_t>> temp_goals;
+    temp_start = start;
+    temp_goals = goals;
+    set_start(maze->start[0]);
+    set_goals(maze->goal);
+    cost_refresh();
+    delete_bad_route();
+
+    std::vector< std::vector<uint8_t>> out;
+
+    for (uint8_t i = 0; i < 16; i++){
+        for (uint8_t j = 0; j < 16; j++){
+            if(maze->route[i][j] != 0 && ((maze->wall[i][j] & Maze::IS_SEARCHED) == 0)){
+                std::vector<uint8_t> temp_vec{i, j};
+                out.push_back(temp_vec);
+            }
+        }
+    }
+    set_start(temp_start);
+    set_goals(temp_goals);
+    return out;
+
 }

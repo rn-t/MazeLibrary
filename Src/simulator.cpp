@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <chrono>
 #include <thread>
+#include <vector>
 
 #include "maze.hpp"
 #include "method.hpp"
@@ -55,10 +56,10 @@ int main(void){
 
     AdachiMethod method(&maze, &mouse);
 
-    for(uint8_t step = 0; step < 3; step++){
-        if(step == 0 || step == 2){
+    for(uint8_t step = 0; step < 4; step++){
+        if(step == 0 || step == 3){
             method.set_goals(maze.goal);
-        }else{
+        }else if (step == 2){
             method.set_goals(maze.start);
         }
 
@@ -66,7 +67,13 @@ int main(void){
 
             //真の迷路からの壁情報の読み込み
             maze.wall_update(mouse.x, mouse.y, true_maze.wall[mouse.x][mouse.y]);
-            
+            std::vector<uint8_t> now{mouse.x, mouse.y};
+            method.set_start(now);
+            if(step == 1){
+                method.set_goals(method.get_unknown_in_shortest());
+                if(method.goals.empty()) break;
+            }
+
             //コストの再計算
             method.cost_refresh();
             //いらない経路の削除
@@ -74,9 +81,13 @@ int main(void){
             
             printf("\033[0;0H");
             maze.print_route(mouse.x, mouse.y);
-            //maze.print_cost();
+            printf("goal = ");
+            for (const auto& g : method.goals){
+                printf("(%d, %d)", g[0], g[1]);
+            }
+            printf("\n\r");
 
-            if(method.goal_check() || step == 2) break;
+            if(method.goal_check() || step == 3) break;
             int16_t mouse_deg = direction_to_deg(mouse.direction);
             int16_t maze_deg = direction_to_deg(maze.route[mouse.x][mouse.y]);
 
@@ -96,9 +107,8 @@ int main(void){
             mouse.move_forward();
 
             //300ms待つ
-            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
-    }
-       
+    } 
     return 0;
 }
