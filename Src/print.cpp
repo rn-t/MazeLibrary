@@ -1,6 +1,7 @@
 #include "direction.hpp"
 #include "print.hpp"
 #include <string>
+#include <algorithm>
 
 void Print::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
     for(int8_t i = 0; i < 16; i++){
@@ -101,10 +102,10 @@ void Print::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2], s
             std::vector<uint8_t> vec{i, j};
             if(i == current[0] && j == current[1]){
                 s = "🖱️";
-            }else if(start.end() != std::find(start.begin(), start.end(), vec)){
+            }else if(maze->start.end() != std::find(maze->start.begin(), maze->start.end(), vec)){
                 s = "🌟";
             }
-            else if(goal.end() != std::find(goal.begin(), goal.end(), vec)){
+            else if(maze->goal.end() != std::find(maze->goal.begin(), maze->goal.end(), vec)){
                 s = "🏁";
             }else if(question.end() != std::find(question.begin(), question.end(), vec)){
                 s = "❓";
@@ -169,7 +170,7 @@ void Print::print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2], s
 }
 
 void Print::print_cost(){
-    print_wall_with_uint8_t(cost);
+    print_wall_with_uint8_t(maze->cost);
 }
 
 /**
@@ -178,5 +179,5 @@ void Print::print_cost(){
 */
 void Print::print_route(uint8_t x, uint8_t y, std::vector<std::vector<uint8_t>> question){
     uint8_t current[2] = {x, y};
-    print_wall_with_arrow(route, current, question);
+    print_wall_with_arrow(maze->route, current, question);
 }
