@@ -7,6 +7,7 @@
 #include "maze.hpp"
 #include "method.hpp"
 #include "direction.hpp"
+#include "print.hpp"
 
 int16_t direction_to_deg(uint8_t direction){
     uint16_t out = 0;
@@ -55,6 +56,7 @@ int main(void){
     }
 
     AdachiMethod method(&maze, &mouse);
+    Print print(&maze);
 
     printf("\033[2J");
     
@@ -86,7 +88,7 @@ int main(void){
             if(step == 1){
                 question = method.goals;
             }
-            maze.print_route(mouse.x, mouse.y, question);
+            print.print_route(mouse.x, mouse.y, question);
             printf("goal = ");
             for (const auto& g : method.goals){
                 printf("(%d,%d)", g[0], g[1]);

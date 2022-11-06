@@ -3,6 +3,10 @@
 #include <string>
 #include <algorithm>
 
+Print::Print(Maze *new_maze){
+    this->maze = new_maze;
+}
+
 void Print::print_wall_with_uint8_t(uint8_t (&n)[16][16] ){
     for(int8_t i = 0; i < 16; i++){
         if(i == 0) printf("┏");

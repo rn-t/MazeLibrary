@@ -9,7 +9,7 @@ class Print{
     public:
     Maze *maze;
 
-    Print(Maze new_maze);
+    Print(Maze *new_maze);
 
     void print_wall_with_uint8_t(uint8_t (&n)[16][16]);
     void print_wall_with_arrow(uint8_t (&n)[16][16], uint8_t (&current)[2], std::vector<std::vector<uint8_t>> question);
