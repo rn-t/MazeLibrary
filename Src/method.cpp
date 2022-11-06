@@ -1,8 +1,4 @@
-#include "stdio.h"
 #include "method.hpp"
-#include <algorithm>
-#include "direction.hpp"
-
 
 AdachiMethod::AdachiMethod(Maze *new_maze, Mouse *new_mouse){
     this->maze = new_maze;

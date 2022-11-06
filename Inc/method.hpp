@@ -1,11 +1,14 @@
 #ifndef METHOD_HPP_
 #define METHOD_HPP_
 
-#include <cstdint>
 #include <vector>
+#include <algorithm>
 
 #include "maze.hpp"
 #include "mouse.hpp"
+#include "stdio.h"
+#include "direction.hpp"
+#include "stdintdef.hpp"
 
 
 class AdachiMethod{

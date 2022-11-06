@@ -1,7 +1,4 @@
-#include "direction.hpp"
 #include "print.hpp"
-#include <string>
-#include <algorithm>
 
 Print::Print(Maze *new_maze){
     this->maze = new_maze;

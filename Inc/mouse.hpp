@@ -1,7 +1,8 @@
 #ifndef MOUSE_HPP_
 #define MOUSE_HPP_
 
-#include <cstdint>
+#include "stdintdef.hpp"
+#include "direction.hpp"
 
 class Mouse{
     public:

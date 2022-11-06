@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <cstdint>
-#include <chrono>
-#include <thread>
-#include <vector>
-
-#include "maze.hpp"
-#include "method.hpp"
-#include "direction.hpp"
-#include "print.hpp"
+#include "simulator.hpp"
 
 int16_t direction_to_deg(uint8_t direction){
     uint16_t out = 0;

@@ -1,4 +1,7 @@
-#include <cstdint>
+#ifndef DIRECTION_HPP_
+#define DIRECTION_HPP_
+
+#include "stdintdef.hpp"
 
 class Direction{
     public:
@@ -7,3 +10,5 @@ class Direction{
     static const uint8_t right = 0b0010;
     static const uint8_t up = 0b0001;
 };
+
+#endif

@@ -1,9 +1,10 @@
 #ifndef MAZE_HPP_
 #define MAZE_HPP_
 
-#include <cstdint>
 #include <vector>
-
+#include <stdio.h>
+#include <algorithm>
+#include "stdintdef.hpp"
 
 class Maze{
     public:

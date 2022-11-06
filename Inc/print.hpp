@@ -1,9 +1,14 @@
 #ifndef PRINT_HPP_
 #define PRINT_HPP_
 
-#include <cstdint>
 #include <vector>
+#include <string>
+#include <algorithm>
+
+#include "stdintdef.hpp"
 #include "maze.hpp"
+#include "direction.hpp"
+
 
 class Print{
     public:

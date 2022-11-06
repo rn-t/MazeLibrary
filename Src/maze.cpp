@@ -1,7 +1,3 @@
-#include <stdio.h>
-
-#include <algorithm>
-
 #include "maze.hpp"
 #include "direction.hpp"
 
