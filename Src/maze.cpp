@@ -25,7 +25,7 @@ Maze::Maze(){
  * @param w: 壁情報
 */
 void Maze::wall_update(uint8_t x, uint8_t y, uint8_t w){
-    wall[x][y] = w;
+    wall[x][y] = wall[x][y] | w;
     wall[x][y] = wall[x][y] | IS_SEARCHED;
 
     if(x != 0 && (wall[x][y] & Direction::left) == Direction::left){
