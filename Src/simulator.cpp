@@ -32,8 +32,12 @@ int16_t deg_sub(int16_t a, int16_t b){
 }
 
 int main(void){
-    Maze maze;
-    Maze true_maze;
+    
+    std::vector< std::vector<uint8_t>> start = {{0, 0}};
+    std::vector< std::vector<uint8_t>> goal = {{7, 7}, {7, 8}, {8, 7}, {8, 8}};
+    
+    Maze maze(start, goal);
+    Maze true_maze(start, goal);
     Mouse mouse;
 
     //迷路データはhttp://mice.deca.jp/maze/ より
@@ -107,8 +111,8 @@ int main(void){
             }
             mouse.move_forward();
 
-            //300ms待つ
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            //150ms待つ
+            std::this_thread::sleep_for(std::chrono::milliseconds(150));
         }
     } 
     return 0;

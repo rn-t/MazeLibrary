@@ -1,10 +1,14 @@
 #include "maze.hpp"
 #include "direction.hpp"
 
+
 /**
  * コンストラクタ 
 */
-Maze::Maze(){
+Maze::Maze(std::vector< std::vector<uint8_t>> new_start, std::vector< std::vector<uint8_t>> new_goal){
+    start = new_start;
+    goal = new_goal;
+    
     //自明な壁(外枠)を生成
     for(uint8_t i = 0; i < 16; i++){
         // 下側に壁を追加

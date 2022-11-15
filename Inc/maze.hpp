@@ -10,17 +10,16 @@ class Maze{
     public:
     
     /**
-     * @brief スタート座標を設定する。複数設定可能。
+     * @brief ゴール座標を保存する。コンストラクタで指定。
      * 
      */
-    std::vector< std::vector<uint8_t>> start{{0, 0}};
+    std::vector< std::vector<uint8_t>> start;
     
     /**
-     * @brief ゴール座標を設定する。複数設定可能。
+     * @brief ゴール座標を保存する。コンストラクタで指定。
      * 
      */
-    //std::vector< std::vector<uint8_t>> goal{{7, 7}, {7, 8}, {8, 7}, {8, 8}};
-    std::vector< std::vector<uint8_t>> goal{{3, 3}};
+    std::vector< std::vector<uint8_t>> goal;
 
     /**
      * @brief 二進数で↓←→↑
@@ -42,7 +41,7 @@ class Maze{
      */
     uint8_t route[16][16] = {};
 
-    Maze();
+    Maze(std::vector< std::vector<uint8_t>> new_start, std::vector< std::vector<uint8_t>> new_goal);
 
     void wall_update(uint8_t x, uint8_t y, uint8_t w);
 
