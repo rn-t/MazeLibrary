@@ -68,9 +68,27 @@ int main(void){
             maze.wall_update(mouse.x, mouse.y, true_maze.wall[mouse.x][mouse.y]);
             std::vector<uint8_t> now{mouse.x, mouse.y};
             method.set_start(now);
+            /*
             if(step == 1){
                 method.set_goals(method.get_unknown_in_shortest());
                 if(method.goals.empty()) break;
+            }
+            */
+            
+            if(method.goal_check() && step == 1){
+                method.goals.clear();
+                for(const auto& g : maze.goal){
+                    if((maze.wall[g[0]][g[1]] & Maze::IS_SEARCHED) == 0){
+                        method.goals.push_back(g);
+                    }
+                }
+                if(method.goals.empty()){
+                    break;
+                }
+            }
+            
+            if(step == 3){
+                method.set_wall_at_unknown();
             }
 
             //コストの再計算
@@ -80,9 +98,13 @@ int main(void){
             
             printf("\033[0;0H");
             std::vector<std::vector<uint8_t>> question;
+            
+            /*
             if(step == 1){
                 question = method.goals;
             }
+            */
+
             print.print_route(mouse.x, mouse.y, question);
             printf("goal = ");
             for (const auto& g : method.goals){
@@ -91,8 +113,13 @@ int main(void){
             printf("\033[0K");
             printf("\n");
             
+            if(method.goal_check() && (step == 0 || step == 2)){
+                break;
+            }
 
-            if(method.goal_check() || step == 3) break;
+            if(step == 3){
+                break;
+            }
             int16_t mouse_deg = direction_to_deg(mouse.direction);
             int16_t maze_deg = direction_to_deg(maze.route[mouse.x][mouse.y]);
 
