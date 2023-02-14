@@ -30,6 +30,8 @@ class AdachiMethod{
     void cost_reset();
     void route_reset();
 
+    void set_wall_at_unknown();
+
     void cost_refresh();
     void delete_bad_route();
     uint8_t goal_check();

@@ -38,6 +38,17 @@ void AdachiMethod::route_reset(){
     }
 }
 
+void AdachiMethod::set_wall_at_unknown(){
+    const uint8_t full_wall = Direction::up + Direction::down + Direction::left + Direction::right;
+    for (uint8_t i = 0; i < 16; i++){
+        for (uint8_t j = 0; j < 16; j++){
+            if((maze->wall[i][j] & Maze::IS_SEARCHED) == 0){
+                maze->wall[i][j] = (maze->wall[i][j] | full_wall);
+            }
+        }
+    }
+}
+
 void AdachiMethod::cost_refresh(){
     cost_reset();
     route_reset();
