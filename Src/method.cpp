@@ -43,7 +43,7 @@ void AdachiMethod::set_wall_at_unknown(){
     for (uint8_t i = 0; i < 16; i++){
         for (uint8_t j = 0; j < 16; j++){
             if((maze->wall[i][j] & Maze::IS_SEARCHED) == 0){
-                maze->wall[i][j] = (maze->wall[i][j] | full_wall);
+                maze->wall_update(i, j, full_wall);
             }
         }
     }
